@@ -1,0 +1,48 @@
+- name: Install Kibana for CentOs
+  yum:
+    name: kibana
+    state: latest
+    update_cache: yes
+  when: ansible_distribution == "CentOS"
+
+- name: Configure Kibana Add server.port for CentOs
+  lineinfile:
+    dest: /etc/kibana/kibana.yml
+    line: "server.port: 5601"
+    state: present
+  when: ansible_distribution == "CentOS"
+
+- name: Configure Kibana Add server.host for CentOs
+  lineinfile:
+    dest: /etc/kibana/kibana.yml
+    line: 'server.host: “0.0.0.0”'
+    state: present
+  when: ansible_distribution == "CentOS"
+
+- name: Configure Kibana Add server.name for CentOs
+  lineinfile:
+    dest: /etc/kibana/kibana.yml
+    line: 'server.name: “demo-kibana”'
+    state: present
+  when: ansible_distribution == "CentOS"
+
+- name: Configure Kibana Add elasticsearch.hosts for CentOs
+  lineinfile:
+    dest: /etc/kibana/kibana.yml
+    line: 'elasticsearch.hosts: [“http://0.0.0.0:9200"]'
+    state: present
+  when: ansible_distribution == "CentOS"
+
+- name: Run daemon-reload for kibana for CentOs
+  systemd: daemon_reload=yes
+  when: ansible_distribution == "CentOS"
+
+- name: Enable service Kibana for CentOs
+  systemd:
+    name: kibana
+    enabled: yes
+  when: ansible_distribution == "CentOS"
+
+- name: Start Kibana for CentOS
+  shell: systemctl start kibana
+  when: ansible_distribution == "CentOS"
